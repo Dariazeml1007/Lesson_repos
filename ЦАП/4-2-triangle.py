@@ -1,12 +1,22 @@
 import RPi.GPIO as GPIO
-from time import sleep
-from funcs import dec2bin
-from matplotlib import pyplot as plt
-import numpy as np
+import time
 
-GPIO.setwarnings(False)
+def dec2bin(decnum):
+    if decnum == 0:
+        return [0, 0, 0, 0, 0, 0, 0, 0]
 
-dac = [26, 19, 13, 6, 5, 11, 9, 10]
+    bins = [0, 0, 0, 0, 0, 0, 0, 0]
+    i = 0
+    while decnum > 0:
+        bins[i] = decnum % 2
+        decnum = decnum // 2
+        i = i + 1
+
+    bins.reverse()
+
+    return bins  
+
+dac = [8, 11, 7, 1, 0, 5, 12, 6]
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(dac, GPIO.OUT)
@@ -26,8 +36,7 @@ try:
 
         x = x + 1 if inc_flag == 1 else x - 1
 
-        sleep(period/512)
-        t += 1
+        time.sleep(period/512)
 
 except ValueError:
     print("Inapropriate period!")
@@ -35,4 +44,3 @@ except ValueError:
 finally:
     GPIO.output(dac, 0)
     GPIO.cleanup()
-    print("EOP")
