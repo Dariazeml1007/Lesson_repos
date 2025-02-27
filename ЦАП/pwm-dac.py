@@ -3,17 +3,17 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(27, GPIO.OUT)
 
-n=10
-p = GPIO.PWM(27, 1000)
-p.start(0)
+
+pwm = GPIO.PWM(27, 1000)
+pwm.start(0)
 
 try:
     while True:
-        f = int(input())
-        p.ChangeDutyCycle(f)
-        print(3.3*f/100)
+        duty_cycle = int(input())
+        pwm.ChangeDutyCycle(duty_cycle)
+        print(3.3*duty_cycle/100)
 
 finally:
-    p.stop()
+    pwm.stop()
     GPIO.output(27,0)
     GPIO.cleanup()
